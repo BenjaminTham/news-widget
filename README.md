@@ -44,22 +44,41 @@ pip install customtkinter feedparser
 python newsparser.py
 ```
 
-<p>6. Want to package this into a single standalone executable file for Windows? No problem! We can use pyinstaller for that.</p>
+<h3> Want to package this into a single standalone executable file for Windows? No problem! We can use pyinstaller for that.</h3>
 
-<p>7. Install PyInstaller:</p>
+<p>1. Install PyInstaller:</p>
 
 ```
 pip install pyinstaller
 ```
 
-<p>8. Run the Build Command: Open your terminal in the project directory and run this command:</p>
+<p>2. Run the Build Command: Open your terminal in the project directory and run this command:</p>
 
 ```
 pyinstaller --onefile --windowed newsparser.py
 ```
 
-<p>9. --onefile: Bundles everything into a single .exe.</p>
+--onefile: Bundles everything into a single .exe.</p>
 
-<p>10. --windowed: Prevents the black console window from opening when you run the app.</p>
+--windowed: Prevents the black console window from opening when you run the app.</p>
 
-<p>11. Find Your App: PyInstaller will create a dist folder. Inside you'll find your brand new newsparser.exe! You can share this file with friends (who use Windows) and they can run it without installing Python.</p>
+<p>3. Find Your App: PyInstaller will create a dist folder. Inside you'll find your brand new newsparser.exe! You can share this file with friends (who use Windows) and they can run it without installing Python.</p>
+
+
+<h2>🤖 What's Next? The AI Radio DJ!</h2>
+
+The next big idea is to transform it from a silent news reader into a fully-fledged AI Radio DJ! Like the one made by Spotify. So all you gotta do is tune into the news feed
+
+*   AI Chatbot: Integrate a chatbot to interact with you.
+*   AI Voice Generator: Instead of you reading the news, an AI voice will tell you the news, just like a radio host.
+*   Music Player: The "DJ" will also play your favorite music tracks between news segments.
+
+<h2>🙏 Acknowledgements</h2>
+
+This project stands on the shoulders of giants. A huge thank you to:
+
+CustomTkinter: For making it so easy to create beautiful, modern GUIs in Python.
+
+feedparser: For doing the heavy lifting of parsing all those RSS feeds.
+
+Channel News Asia & The Straits Times: For providing the high-quality news feeds.
