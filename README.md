@@ -2,7 +2,8 @@
 
 <p id="description">This is a simple lightweight Python project that puts a sleek modern news feed right on your desktop. It's designed to be unobtrusive helpful and a little bit cool. It floats on your screen is semi-transparent and gives you the latest headlines from Singapore's top news sources at a glance.</p>
 
-  
+<img width="792" height="857" alt="image" src="https://github.com/user-attachments/assets/283acb0e-3c16-46b9-8de1-05909d7890cb" />
+
   
 <h2>🧐 Features</h2>
 
