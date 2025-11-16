@@ -17,6 +17,10 @@ Here're some of the project's best features:
 *   Lightweight: Uses minimal system resources.
 *   Simple Controls: Just press the Escape key to close the app.
 
+<h2>🧐 How To Use</h2>
+
+Simply download the .exe in the dist folder and double click it. To exit, press the esc button
+
 <h2>🛠️ Installation Steps:</h2>
 
 <p>1. Make sure you have Python 3 installed on your system.</p>
