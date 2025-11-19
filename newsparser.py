@@ -1,80 +1,85 @@
 import feedparser
-from customtkinter import *
+import os
+import customtkinter as ctk
+import pygame
+from gpt4all import GPT4All
+import sys
 
-def on_drag_start(event):
-    widget = event.widget.winfo_toplevel()
-    widget._drag_start_x = event.x
-    widget._drag_start_y = event.y
-
-def on_drag_motion(event):
-    widget = event.widget.winfo_toplevel()
-    x = widget.winfo_x() - widget._drag_start_x + event.x
-    y = widget.winfo_y() - widget._drag_start_y + event.y
-    widget.geometry(f"+{x}+{y}")
-
-def close_app(event=None):
-    root.destroy()
+NEWS_NUMBER = 1
+list_of_news = []
 
 rss_feed_urls = [
     "https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml",
-    "https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml&category=6511",
-    "https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml&category=6936",
-    "https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml&category=10416",
-    "https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml&category=10296",
     "https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml&category=6311",
-    "https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml&category=679471",
-    "https://www.straitstimes.com/news/singapore/rss.xml",
-    "https://www.straitstimes.com/news/asia/rss.xml",
-    "https://www.straitstimes.com/news/world/rss.xml",
-    "https://www.straitstimes.com/news/opinion/rss.xml",
-    "https://www.straitstimes.com/news/life/rss.xml",
-    "https://www.straitstimes.com/news/business/rss.xml",
-    "https://www.straitstimes.com/news/sport/rss.xml",
-    "https://www.straitstimes.com/news/multimedia/rss.xml",
-    "https://www.straitstimes.com/news/newsletter/rss.xml"
-
+    "https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml&category=10416"
 ]
-root = CTk()
 
-screen_width = root.winfo_screenwidth()
-screen_height = root.winfo_screenheight()
-root.geometry(f"800x{screen_height}")
-root.attributes("-alpha", 0.9)
-
-root.overrideredirect(True)
-
-text_widget = CTkTextbox(root, 
-                         wrap="word", 
-                         font=("Arial", 14), 
-                         fg_color="transparent") 
-
-text_widget.pack(fill="both", expand=True, padx=10, pady=10)
-
-text_widget.bind("<Button-1>", on_drag_start)
-text_widget.bind("<B1-Motion>", on_drag_motion)
-root.bind("<Escape>", close_app)
-
-text_widget.tag_config("title_style", 
-                       foreground="#00AEEF") 
-
-text_widget.tag_config("published_style", 
-                       foreground="gray")
-
-text_widget.tag_config("summary_style", 
-                       foreground="white") 
-
-text_widget.tag_config("separator_style", 
-                       foreground="#444444")
-
-for url in rss_feed_urls:
+def fetch_rss_data(url):
+    global NEWS_NUMBER
+    global list_of_news
     feed = feedparser.parse(url)
-
     for entry in feed.entries:
-        text_widget.insert(END, f"TITLE: {entry.title}\n", "title_style")
-        text_widget.insert(END, f"Published: {entry.published}\n", "published_style")
-        text_widget.insert(END, f"Summary: {entry.summary}\n", "summary_style")
-        text_widget.insert(END, "-" * 80 + "\n\n", "separator_style")
+        list_of_news.append(f"News {NEWS_NUMBER}: {entry.title} Summary:{entry.summary}")
+        NEWS_NUMBER+=1
 
-text_widget.configure(state=DISABLED)
+def clear_console():
+    """Clears the console screen."""
+    _ = os.system('clear')
 
-root.mainloop()
+def updateLoop():
+    global NEWS_NUMBER
+    global list_of_news
+
+    clear_console()
+    NEWS_NUMBER = 1
+    for url in rss_feed_urls:
+        fetch_rss_data(url)
+    # print(list_of_news)
+    app.after(1000, updateLoop)
+
+def play_sound():
+    try:
+        pygame.mixer.music.load("sound.mp3")
+        pygame.mixer.music.play()
+    except Exception as e:
+        print(f"Error playing sound: {e}")
+
+model = GPT4All("Phi-3-mini-4k-instruct.Q4_0.gguf", device="cpu")
+with model.chat_session():
+    print(model.generate(f"Immediately talk like a dj news caster and report these news. {list_of_news[:5]}", max_tokens=1024))
+
+
+ctk.set_appearance_mode("dark")
+ctk.set_default_color_theme("blue")
+
+app = ctk.CTk()
+app.title("Hello CustomTkinter")
+app.geometry("400x200")
+pygame.mixer.init()
+
+frame = ctk.CTkFrame(
+    master=app,
+    width=200,
+    height=200,
+    corner_radius=10,
+    border_width=2
+)
+frame.pack(pady=20, padx=20, fill="both", expand=True)
+
+label = ctk.CTkLabel(master=frame, text="Frame Content")
+label.pack(pady=10)
+
+button = ctk.CTkButton(
+    master=frame,
+    text="Click Me",
+    command=play_sound,
+    width=120,
+    height=32,
+    border_width=0,
+    corner_radius=8,
+    hover=True
+)
+button.pack(pady=10)
+
+# app.after(1000, updateLoop)
+app.mainloop()
